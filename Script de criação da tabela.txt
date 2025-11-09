@@ -1,0 +1,7 @@
+Script de criação da tabela 
+
+create table Agenda (
+    nome varchar(50), 
+    tel varchar (15),
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY
+);

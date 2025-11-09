@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
+import jakarta.servlet.RequestDispatcher;
 import java.sql.Connection;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,6 +13,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -22,15 +27,18 @@ import java.sql.DriverManager;
 @WebServlet(urlPatterns = {"/Agenda"})
 public class Agenda extends HttpServlet {
     
+    // conectando o projeto com o banco de dados
     Connection conexao = null;
 
     @Override
     public void init() throws ServletException{
+        
         try{
-            conexao = DriverManager.getConnection("jdbc:derby://localhost:1527/Agenda/ze/123");
+            // fazendo a conexão com o BD
+            conexao = DriverManager.getConnection("jdbc:derby://localhost:1527/Agenda","ze","123");
         }
         catch (Exception ex){
-
+            
         }
     }
 
@@ -49,7 +57,7 @@ public class Agenda extends HttpServlet {
         
         
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
+            /* TODO output your page here. You may use following sample code. 
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -63,12 +71,47 @@ public class Agenda extends HttpServlet {
             out.println("<input type = 'text' name = 'nome' placeholder = 'NOME' ><br>");
             out.println("<input type = 'text' name = 'tel' placeholder = 'TELEFONE' ><br>");
             out.println("<input type = 'submit' >");
-            out.println("</form><br>");
-            
+            out.println("</form><br>");               
             out.println("</body>");
-            out.println("</html>");
+            out.println("</html>");    */
             
+            String nome = request.getParameter("nome");
+            String tel = request.getParameter("tel");
             
+            String comandoSql = "insert into Agenda (nome,tel) values (?,?)";
+            try (PreparedStatement sql = conexao.prepareStatement(comandoSql)){
+                int id;
+                sql.setString(1, nome);
+                sql.setString(2, tel);
+                
+                sql.executeUpdate();
+            }
+            catch (Exception e){
+                out.println("erro " + e );
+            }
+            
+            comandoSql = "select * from Agenda"; 
+            try(PreparedStatement sql = conexao.prepareStatement(comandoSql)){
+                ResultSet rs = sql.executeQuery();
+                List <Contato> contatos = new ArrayList<>();
+                while (rs.next()){
+                    contatos.add(new Contato(
+                            rs.getString("nome"),
+                            rs.getString("tel"),
+                            rs.getInt ("id")));   
+                }
+                
+                request.setAttribute("contatos", contatos);
+                
+                RequestDispatcher dispatcher = request.getRequestDispatcher("Agenda.jsp");
+                    if (dispatcher != null){
+                        dispatcher.forward(request, response);
+                    }
+            }
+            catch (Exception e){
+                
+            }
+  
         }
     }
 
