@@ -14,31 +14,32 @@
         <link rel="stylesheet" href="minhasDiv2.css"> 
     </head>
     <body>
-        <div id =  "div1">
-            AGENDA
-        </div>
-        <div class = "container">
-            
-            <div class="div3">
-                <c:forEach var="c" items="${contatos}">
-                    ${c.nome}  -  ${c.tel}  -  ${c.id} <br>
-                </c:forEach>
+        <div id = "page">
+            <div id =  "div1">
+                AGENDA
             </div>
-            
-            <div class="div4">
-                <div id = "div5">
-                    <FORM action ="Agenda" method ="POST">
-                        <br> 
-                        <input type ="text" name="nome" maxlenght="50" placeholder="NOME"><!-- comment -->
-                        <input type="text" name="tel" maxlength="15" placeholder="TELEFONE"><!-- comment -->
-                        <button type="submit">ENVIAR</button>           
-                    </FORM>
+            <div class = "container">
+
+                <div class="div3">
+                    <c:forEach var="c" items="${contatos}">
+                        ${c.nome}  -  ${c.tel}  -  ${c.id} <br>
+                    </c:forEach>
                 </div>
 
-                <div id="div6"></div>
+                <div class="div4">
+                    <div id = "div5">
+                        <FORM action ="Agenda" method ="POST">
+                            <br> 
+                            <input type ="text" name="nome" maxlenght="50" placeholder="NOME"><!-- comment -->
+                            <input type="text" name="tel" maxlength="15" placeholder="TELEFONE"><!-- comment -->
+                            <button type="submit">ENVIAR</button>           
+                        </FORM>
+                    </div>
+
+                    <div id="div6"></div>
+                </div>
+
             </div>
-            
         </div>
-        
     </body>
 </html>
