@@ -55,8 +55,8 @@ public class Agenda extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        
-        try (PrintWriter out = response.getWriter()) {
+        PrintWriter out = response.getWriter();
+        try  {
             /* TODO output your page here. You may use following sample code. 
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -77,20 +77,35 @@ public class Agenda extends HttpServlet {
             
             String nome = request.getParameter("nome");
             String tel = request.getParameter("tel");
+            String choice = request.getParameter("choice");
+            String idStr = request.getParameter("idSai");
             
-            String comandoSql = "insert into Agenda (nome,tel) values (?,?)";
-            try (PreparedStatement sql = conexao.prepareStatement(comandoSql)){
-                int id;
-                sql.setString(1, nome);
-                sql.setString(2, tel);
-                
-                sql.executeUpdate();
+            if ("INSERIR".equals(choice)){
+                String comandoSql = "insert into Agenda (nome,tel) values (?,?)";
+                try (PreparedStatement sql = conexao.prepareStatement(comandoSql)){
+                    int id;
+                    sql.setString(1, nome);
+                    sql.setString(2, tel);
+                    sql.executeUpdate();
+                }
+                catch (Exception e){
+                    out.println("erro " + e );
+                }
             }
-            catch (Exception e){
-                out.println("erro " + e );
+
+            
+            else if ("APAGAR".equals(choice)){
+                int idOut = Integer.parseInt(idStr);
+                String comandoSql = "delete from Agenda where id = ?";
+                try (PreparedStatement sql = conexao.prepareStatement(comandoSql)){
+                    sql.setInt(1,idOut);
+                    sql.executeUpdate();
+                }               
             }
             
-            comandoSql = "select * from Agenda"; 
+                        
+            
+            String comandoSql = "select * from Agenda"; 
             try(PreparedStatement sql = conexao.prepareStatement(comandoSql)){
                 ResultSet rs = sql.executeQuery();
                 List <Contato> contatos = new ArrayList<>();
@@ -100,19 +115,25 @@ public class Agenda extends HttpServlet {
                             rs.getString("tel"),
                             rs.getInt ("id")));   
                 }
-                
                 request.setAttribute("contatos", contatos);
-                
-                RequestDispatcher dispatcher = request.getRequestDispatcher("Agenda.jsp");
-                    if (dispatcher != null){
-                        dispatcher.forward(request, response);
-                    }
             }
             catch (Exception e){
-                
+                out.println("erro " + e );
             }
-  
+            
+
+                
+                
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Agenda.jsp");
+                if (dispatcher != null){
+                    dispatcher.forward(request, response);
+                }
         }
+        catch (Exception e){
+            out.println("erro " + e );
+        }   
+  
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

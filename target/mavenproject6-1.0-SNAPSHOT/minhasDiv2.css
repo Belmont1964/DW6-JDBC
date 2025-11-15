@@ -21,10 +21,10 @@ html, body {
 }
 
 #page {               /* envolve #div1 + .container */
-  min-height: 100vh;
+  min-height: 100vh; /* garante a exibição da div mesmo vazia (vh = viewport height)*/
   display: flex;
   flex-direction: column;
-  min-width: 0;
+  min-width: 0; /* permite que o elemento diminua sua largura abaixo do tamanho mínimo natural e evita que o item “estoure” o container flex */
   padding: 5px;
 }
 

@@ -20,20 +20,34 @@
             </div>
             <div class = "container">
 
-                <div class="div3">
+                <div class="div3">                   
                     <c:forEach var="c" items="${contatos}">
-                        ${c.nome}  -  ${c.tel}  -  ${c.id} <br>
-                    </c:forEach>
+                        <FORM action ="Agenda" method ="POST">
+                            ${c.nome}  -  ${c.tel}  -  ${c.id} - 
+                            <button type="submit">APAGAR</button>
+                            <br>
+                            <input type="hidden" name="choice" value="APAGAR">
+                            <input type="hidden" name="idSai" value="${c.id}"> 
+                        </FORM>
+                    </c:forEach>                            
                 </div>
 
                 <div class="div4">
                     <div id = "div5">
-                        <FORM action ="Agenda" method ="POST">
+                        <FORM action ="Agenda" method ="POST">                          
                             <br> 
-                            <input type ="text" name="nome" maxlenght="50" placeholder="NOME"><!-- comment -->
-                            <input type="text" name="tel" maxlength="15" placeholder="TELEFONE"><!-- comment -->
-                            <button type="submit">ENVIAR</button>           
+                            <!-- input type="hidden" name="choice" value="INSERIR"-->
+                            <input type ="text" name="nome" maxlenght="50" placeholder="NOME" size=50><!-- comment -->
+                            <input type="text" name="tel" maxlength="15" placeholder="TELEFONE"><br><!-- comment -->
+                            <button type="submit" name="choice" value="INSERIR">INSERIR</button>
+                            <button type="submit" name="choice" value="MOSTRAR">MOSTRAR</button>
                         </FORM>
+                        <!--
+                        <FORM action ="Agenda" method ="POST">
+                            <input type="hidden" name="choice" value="MOSTRAR">
+                            <button type="submit">MOSTRAR</button> 
+                         </FORM>
+                        -->
                     </div>
 
                     <div id="div6"></div>
